@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mortgage calculator</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <section class="main-page" id="calculator">
+      <div>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio incidunt repellendus minus
+        veritatis consectetur. Repellendus est voluptas necessitatibus excepturi obcaecati vero
+        omnis magni nesciunt facilis. At ea nisi deserunt! Asperiores eum animi alias magni atque id
+        tempore inventore deleniti officiis voluptate, cumque iusto, molestiae maiores debitis
+        nihil. Consequatur, vero facere!
+      </div>
+      <form action="" id="calculator-form">
+        <input id="bank_name" placeholder="bank_name" type="text" required />
+        <input id="interest_rate" placeholder="interest_rate" type="text" required />
+        <input id="maximum_loan" placeholder="maximum_loan" type="text" required />
+        <input id="minimum_down_payment" placeholder="minimum_down_payment" type="text" required />
+        <input
+          id="loan_term"
+          placeholder="loan_term"
+          type="number"
+          step="1"
+          min="1"
+          max="120"
+          value="12"
+          required
+        />
+        <button type="submit">Add</button>
+      </form>
+      <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloribus, explicabo!</div>
+
+      <table id="table-of-banks">
+        <tbody>
+          <tr>
+            <th>Bank name</th>
+            <th>
+              Interest rate <br />
+              (%)
+            </th>
+            <th>Maximum loan</th>
+            <th>
+              Minimum down <br />
+              payment <br />
+              (%)
+            </th>
+            <th>
+              Loan term <br />
+              (years)
+            </th>
+            <th colspan="3"></th>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- modal calculator -->
+
+    <div id="id02" class="modal">
+      <div class="modal-content animate">
+        <div class="imgcontainer">
+          <span
+            onclick="document.getElementById('id02').style.display='none'"
+            class="close"
+            title="Close Modal"
+            >×</span
+          >
+        </div>
+        <div class="container">
+          <div>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus, ipsa. Odio ad labore
+            maxime officiis odit rem mollitia, recusandae veritatis!
+            <table id="table-for-bank-calculator">
+              <tbody>
+                <tr>
+                  <th>Bank name</th>
+                  <th>
+                    Interest rate <br />
+                    (%)
+                  </th>
+                  <th>Maximum loan</th>
+                  <th>
+                    Minimum down <br />
+                    payment <br />
+                    (%)
+                  </th>
+                  <th>
+                    Loan term <br />
+                    (years)
+                  </th>
+                </tr>
+                <tr>
+                  <th id="name-bank-modal"></th>
+                  <th id="interest-rate-modal"></th>
+                  <th><input id="amount-borrowed-modal" type="text" /></th>
+                  <!-- сумма займа - показывает макс но можно изменить -->
+                  <th>
+                    <input id="minimum-down-payment-modal" type="text" />
+                    <!--расчет автоматически но можно изменить в больш сторону-->
+                  </th>
+                  <th>
+                    <select id="select-loan-term">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                    </select>
+                  </th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident, officiis.</div>
+          <button id="calculator-btn">calculate payments</button>
+          <table id="table-of-calculator">
+            <tbody>
+              <tr>
+                <th>номер мес платежа</th>
+                <th>сумма платежа</th>
+                <th>проценты</th>
+                <th>погашение долга</th>
+                <th>остаток долга</th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/calculator.js"></script>
+    <script src="js/Close_modal.js"></script>
+  </body>
+</html>
