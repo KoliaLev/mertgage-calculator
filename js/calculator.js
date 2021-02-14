@@ -1,7 +1,3 @@
-let formForAddBank = document.getElementById("calculator-form");
-
-formForAddBank.addEventListener("submit", addBank);
-
 // const banks = [
 //   // {
 //   //   bankName: "FIRST Bank",
@@ -19,7 +15,16 @@ formForAddBank.addEventListener("submit", addBank);
 //   // },
 // ];
 
-loadBankToPage();
+const promise = loadBankToPage()
+  .then((response) => response.json())
+  .then((responseData) => {
+    banks = mapBank(responseData);
+    render();
+  });
+
+let formForAddBank = document.getElementById("calculator-form");
+
+formForAddBank.addEventListener("submit", addBank);
 
 function addBank(event) {
   event.preventDefault();
@@ -38,11 +43,8 @@ function addBank(event) {
     !minDownPayment.value.trim() ||
     !loanTerm.value.trim()
   ) {
-    console.log("не все поля заполнены");
-    // showMistakeMessage(event);
     showNote(bankName, "не все поля заполнены");
   } else if (isBank(bankName.value)) {
-    // showMessageIsBank(event);
     showNote(bankName, "такой банк уже есть в базе");
   } else {
     bank.bankName = bankName.value.trim();
@@ -71,41 +73,6 @@ function isBank(name) {
   }
 }
 
-// function showMessageIsBank(event) {
-//   console.log("такой банк уже есть в базе даных");
-//   const message = document.createElement("div");
-//   message.style.position = "absolute";
-//   message.style.color = "red";
-//   message.innerText = "такой банк уже есть в базе даных";
-
-//   console.log(event);
-//   console.log(message.clientWidth);
-//   document.body.append(message);
-//   message.style.left =
-//     event.srcElement.offsetLeft + event.srcElement.offsetWidth / 2 - message.clientWidth / 2 + "px";
-//   message.style.top = event.srcElement.offsetHeight + event.srcElement.offsetTop + "px";
-//   console.log(message.clientWidth);
-//   setInterval(() => message.remove(), 1500);
-// }
-
-// function showMistakeMessage(event) {
-//   // доделать координаты сообщения
-//   const message = document.createElement("div");
-//   message.style.position = "absolute";
-//   message.style.color = "red";
-//   message.innerText = "не все поля заполнены";
-
-//   console.log(event);
-//   console.log(message.clientWidth);
-//   document.body.append(message);
-//   message.style.left =
-//     event.srcElement.offsetLeft + event.srcElement.offsetWidth / 2 - message.clientWidth / 2 + "px";
-//   message.style.top = event.srcElement.offsetHeight + event.srcElement.offsetTop + "px";
-
-//   console.log(message.clientWidth);
-//   setInterval(() => message.remove(), 1500);
-// }
-
 function mapBank(data) {
   const { values: rows } = data;
   const headerKeys = rows.shift();
@@ -123,7 +90,7 @@ function mapBank(data) {
 function render() {
   let table = document.getElementById("table-of-banks");
 
-  for (const bank of banks) {
+  banks.forEach((bank) => {
     let line = document.createElement("tr");
     for (const param in bank) {
       let td = document.createElement("td");
@@ -134,21 +101,7 @@ function render() {
     addButton(line, "del");
     addButton(line, "expand");
     table.lastElementChild.append(line);
-  }
-}
-
-function loadBankToPage() {
-  //
-  const sheetId = "1THnbQE8Wqd7ATyg3rdbZB8xsWG8HMdBgT5u70PfDa_Q";
-  const apiKey = "AIzaSyDdTUdVUMNo5ZuwGWcm0uxFE6ukg6YlcOE";
-  fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Аркуш1?key=${apiKey}`)
-    .then((response) => response.json())
-    .then((responseData) => {
-      banks = mapBank(responseData);
-      render();
-    });
-
-  //
+  });
 }
 
 function addBankToPage(bank) {
@@ -165,7 +118,7 @@ function addBankToPage(bank) {
   table.lastElementChild.append(line);
 }
 
-function addButton(tr, action) {
+function addButton(elem, action) {
   let td = document.createElement("td");
   td.className = action;
   //   td.style.padding = 0;
@@ -175,15 +128,37 @@ function addButton(tr, action) {
   button.style.padding = 0;
   button.style.margin = 0;
   td.append(button);
-  tr.append(td);
+  elem.append(td);
   if (action == "del") {
+    eventBtnDelBank();
+  }
+  if (action == "edit") {
+    eventBtnEditingBank();
+  }
+  if (action == "expand") {
+    eventBtnExpandBank();
+  }
+
+  function eventBtnDelBank() {
     button.onclick = () => {
       button.parentElement.parentElement.remove();
       let nameBank = button.parentElement.parentElement.firstElementChild.innerText;
       deleteBank(nameBank);
     };
   }
-  if (action == "edit") {
+
+  function eventBtnExpandBank() {
+    button.onclick = () => {
+      let nameBank = button.parentElement.parentElement.firstElementChild.innerText;
+
+      let bankForModal = getBankByName(nameBank);
+
+      document.getElementById("id02").style.display = "block";
+      createModalBank(bankForModal);
+    };
+  }
+
+  function eventBtnEditingBank() {
     button.onclick = () => {
       // превращаем ячейки строки на инпуты
       let nameBank = button.parentElement.parentElement.firstElementChild.innerText;
@@ -217,138 +192,12 @@ function addButton(tr, action) {
       };
     };
   }
-  if (action == "expand") {
-    // save bank to object
-
-    //   opend modal
-    button.onclick = () => {
-      let nameBank = button.parentElement.parentElement.firstElementChild.innerText;
-
-      document.getElementById("id02").style.display = "block";
-      createModalBank(nameBank);
-    };
-  }
 }
 
-function createModalBank(name) {
-  let calcBank = {};
-  for (let i = 0; i < banks.length; i++) {
-    if (banks[i].bankName == name) {
-      calcBank = { ...banks[i] };
-    }
-  }
-  console.log(calcBank);
-
-  document.getElementById("name-bank-modal").innerText = calcBank.bankName;
-  document.getElementById("interest-rate-modal").innerText = calcBank.interestRate + ` %`;
-
-  let ammountBorrowed = document.getElementById("amount-borrowed-modal");
-  ammountBorrowed.value = `${calcBank.maxLoan}`;
-  // нужно переделать обработчик что бы каждый раз создавался новый
-  // а старый удалялся, ато сейчас запускается новый обработчик,
-  // но первый остается работать сначальными первыми даными
-  ammountBorrowed.removeEventListener("keyup", handlerForAmmountBoroved);
-  ammountBorrowed.addEventListener("keyup", handlerForAmmountBoroved);
-
-  let minPayment = document.getElementById("minimum-down-payment-modal");
-  minPayment.value = `${(ammountBorrowed.value * calcBank.minDownPayment) / 100}`;
-  minPayment.removeEventListener("keyup", handlerForMinPayment);
-  minPayment.addEventListener("keyup", handlerForMinPayment);
-
-  let term = document.getElementById("select-loan-term");
-  term.innerHTML = "";
-  for (let i = 1; i <= calcBank.loanTerm; i++) {
-    let option = document.createElement("option");
-    option.value = i;
-    option.innerText = i;
-    term.append(option);
-  }
-
-  document.getElementById("calculator-btn").onclick = calculationOfPayments;
-
-  function handlerForAmmountBoroved() {
-    if (+ammountBorrowed.value > +calcBank.maxLoan) {
-      console.log("в обработчике нажатия клавиши. calcBank: ");
-      console.log(calcBank);
-      console.log("банк может дать сумму не больше " + calcBank.maxLoan);
-      console.log("а вы хотите взять сумму:  " + ammountBorrowed.value);
-      showNote(ammountBorrowed, "сумма превышает макс ссуду банка");
-      ammountBorrowed.value = `${calcBank.maxLoan}`;
-    } else {
-      document.getElementById("minimum-down-payment-modal").value = `${
-        (ammountBorrowed.value * calcBank.minDownPayment) / 100
-      }`;
-    }
-  }
-
-  function handlerForMinPayment() {
-    if (minPayment.value < (ammountBorrowed.value * calcBank.minDownPayment) / 100) {
-      console.log("there");
-      showNote(minPayment, "min платеж не может юыть меньше чем предусмотрено банком");
-      // minPayment.value = `${(ammountBorrowed.value * calcBank.minDownPayment) / 100}`;
-    }
-  }
-}
-
-function calculationOfPayments() {
-  let rate = +document.getElementById("interest-rate-modal").innerText.split(" ")[0];
-  let loan = +document.getElementById("amount-borrowed-modal").value;
-  let firstPayment = +document.getElementById("minimum-down-payment-modal").value;
-  let termYears = +document.getElementById("select-loan-term").value;
-
-  loan = loan - firstPayment;
-  let monthRate = rate / 12 / 100;
-
-  let generalRate = Math.pow(1 + monthRate, termYears * 12);
-  let monthPayment = (loan * monthRate * generalRate) / (generalRate - 1);
-  monthPayment = Math.round(monthPayment);
-
-  let countPayment = 1;
-
-  let table = document.getElementById("table-of-calculator");
-  // очистка таблицы (кроме шапки)
-  [].slice.call(table.querySelectorAll("tr"), 1).forEach((elem) => elem.remove());
-
-  createPaymentLine(monthPayment, loan, monthRate);
-  table.querySelectorAll("td").forEach((elem) => {
-    elem.style.paddingRight = "40px";
-    elem.style.fontFamily = "monospace";
-    elem.style.textAlign = "right";
-  });
-
-  function createPaymentLine(payment, loan, rate) {
-    let tr = document.createElement("tr");
-    let interest = Math.floor(loan * rate);
-    let repayment = payment - interest;
-    if (payment > loan + interest) {
-      payment = loan + interest;
-
-      loan = 0;
-      tr.innerHTML = `
-      <td>${countPayment++}</td>
-      <td>${payment.toLocaleString()}</td>
-      <td>${interest.toLocaleString()}</td>
-      <td>${repayment.toLocaleString()}</td>
-      <td>${loan.toLocaleString()}</td>
-      `;
-      table.lastElementChild.append(tr);
-    } else {
-      loan = loan - repayment;
-      tr.innerHTML = `
-      <td>${countPayment++}</td>
-      <td>${payment.toLocaleString()}</td>
-      <td>${interest.toLocaleString()}</td>
-      <td>${repayment.toLocaleString()}</td>
-      <td>${loan.toLocaleString()}</td>
-      `;
-      if (countPayment % 2 == 0) {
-        tr.querySelectorAll("td").forEach((elem) => (elem.style.background = "rgb(148 218 3)"));
-      }
-      table.lastElementChild.append(tr);
-
-      createPaymentLine(payment, loan, rate);
-    }
-  }
+function getBankByName(name) {
+  return banks.find((bank) => {
+    if (bank.bankName == name) return bank;
+  }, name);
 }
 
 function deleteBank(name) {
@@ -390,9 +239,9 @@ function showNote(anchor, html) {
     note.remove();
     anchor.style.background = "white";
   }, 1500);
-}
 
-function positionAt(anchor, elem) {
-  // elem.style.left = anchorCoords.left + "px";
-  elem.style.top = anchor.parentElement.clientHeight + "px";
+  function positionAt(anchor, elem) {
+    // elem.style.left = anchorCoords.left + "px";
+    elem.style.top = anchor.parentElement.clientHeight + "px";
+  }
 }
