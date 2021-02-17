@@ -26,6 +26,8 @@ let formForAddBank = document.getElementById("calculator-form");
 
 formForAddBank.addEventListener("submit", addBank);
 
+// //////////////
+
 function addBank(event) {
   event.preventDefault();
   const bank = {};
@@ -195,33 +197,36 @@ function addButton(elem, action) {
 }
 
 function getBankByName(name) {
-  return banks.find((bank) => {
-    if (bank.bankName == name) return bank;
-  }, name);
+  return banks.find((bank) => bank.bankName == name);
 }
 
 function deleteBank(name) {
-  for (let i = 0; i < banks.length; i++) {
-    if (banks[i].bankName == name) {
-      console.log(" будет удален банк " + banks[i].bankName);
-      banks.splice(i, 1);
-      break;
-    }
-  }
+  let index = banks.findIndex((bank) => (bank.bankName = name));
+
+  console.log(" будет удален банк " + getBankByName(name).bankName);
+
+  banks.splice(index, 1);
+
+  // for (let i = 0; i < banks.length; i++) {
+  //   if (banks[i].bankName == name) {
+  //     console.log(" будет удален банк " + banks[i].bankName);
+  //     banks.splice(i, 1);
+  //     break;
+  //   }
+  // }
 }
 
 function editBank(name, props) {
-  for (let i = 0; i < banks.length; i++) {
-    console.log("передано имя банка: " + name);
-    console.log("перебор банков. сейчас смотрим " + banks[i].bankName);
-    if (banks[i].bankName == name) {
-      banks[i].bankName = props[0].innerHTML;
-      banks[i].interestRate = props[1].innerHTML;
-      banks[i].maxLoan = props[2].innerHTML;
-      banks[i].minDownPayment = props[3].innerHTML;
-      banks[i].loanTerm = props[4].innerHTML;
-    }
-  }
+  let bank = banks.find((bank) => bank.bankName == name);
+
+  console.log("передано имя банка: " + name);
+  console.log("найден банк: " + bank.bankName);
+
+  bank.bankName = props[0].innerHTML;
+  bank.interestRate = props[1].innerHTML;
+  bank.maxLoan = props[2].innerHTML;
+  bank.minDownPayment = props[3].innerHTML;
+  bank.loanTerm = props[4].innerHTML;
 }
 
 function showNote(anchor, html) {
