@@ -37,7 +37,8 @@ h1 {
 /* Modal */
 /* Full-width input fields */
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="number"] {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
