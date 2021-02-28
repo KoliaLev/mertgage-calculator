@@ -95,20 +95,7 @@ function mapBank(data) {
 }
 
 function render() {
-  let table = document.getElementById("table-of-banks");
-
-  banks.forEach((bank) => {
-    let line = document.createElement("tr");
-    for (const param in bank) {
-      let td = document.createElement("td");
-      td.innerText = bank[param];
-      line.append(td);
-    }
-    addButton(line, "edit");
-    addButton(line, "del");
-    addButton(line, "expand");
-    table.lastElementChild.append(line);
-  });
+  banks.forEach((bank) => addBankToPage(bank));
 }
 
 function addBankToPage(bank) {
@@ -116,6 +103,7 @@ function addBankToPage(bank) {
   let line = document.createElement("tr");
   for (const prop in bank) {
     let td = document.createElement("td");
+    td.className = "bank-data";
     td.innerText = bank[prop];
     line.append(td);
   }
@@ -127,7 +115,7 @@ function addBankToPage(bank) {
 
 function addButton(elem, action) {
   let td = document.createElement("td");
-  td.className = action;
+  td.className = "td-for-btn";
   //   td.style.padding = 0;
 
   let button = document.createElement("button");
@@ -171,11 +159,11 @@ function addButton(elem, action) {
       let nameBank = button.parentElement.parentElement.firstElementChild.innerText;
       let lineCells = button.parentElement.parentElement.getElementsByTagName("td");
 
-      lineCells[0].innerHTML = `<input type="text" value="${lineCells[0].innerText}" style="padding: 0px; margin: 0px;" /> `;
-      lineCells[1].innerHTML = `<input type="number" value="${lineCells[1].innerText}" style="padding: 0px; margin: 0px;" /> `;
-      lineCells[2].innerHTML = `<input type="number" value="${lineCells[2].innerText}" style="padding: 0px; margin: 0px;" /> `;
-      lineCells[3].innerHTML = `<input type="number" value="${lineCells[3].innerText}" style="padding: 0px; margin: 0px;" /> `;
-      lineCells[4].innerHTML = `<input type="number" value="${lineCells[4].innerText}" style="padding: 0px; margin: 0px;" /> `;
+      lineCells[0].innerHTML = `<input type="text" value="${lineCells[0].innerText}" class="table-edit-input" /> `;
+      lineCells[1].innerHTML = `<input type="number" value="${lineCells[1].innerText}" class="table-edit-input" /> `;
+      lineCells[2].innerHTML = `<input type="number" value="${lineCells[2].innerText}" class="table-edit-input" /> `;
+      lineCells[3].innerHTML = `<input type="number" value="${lineCells[3].innerText}" class="table-edit-input" /> `;
+      lineCells[4].innerHTML = `<input type="number" value="${lineCells[4].innerText}" class="table-edit-input" /> `;
 
       ///
       // for (let cell = 0; cell < 5; cell++) {
@@ -202,10 +190,10 @@ function addButton(elem, action) {
             lineCells[cell].innerHTML = `${text}`;
           }
 
-          lineCells[5].firstChild.hidden = false;
-          lineCells[5].lastElementChild.remove();
+          lineCells[5].firstChild.hidden = false; // показывает кнопку edit
+          lineCells[5].lastElementChild.remove(); // удаляем кнопку save
         } else {
-          showNote(button, "нельзя оставлять яч пусые");
+          showNote(buttonSave, "имеются незаполненые поля");
         }
       };
     };

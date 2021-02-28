@@ -12,12 +12,9 @@
   </head>
   <body>
     <section class="main-page" id="calculator">
-      <div>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio incidunt repellendus minus
-        veritatis consectetur. Repellendus est voluptas necessitatibus excepturi obcaecati vero
-        omnis magni nesciunt facilis. At ea nisi deserunt! Asperiores eum animi alias magni atque id
-        tempore inventore deleniti officiis voluptate, cumque iusto, molestiae maiores debitis
-        nihil. Consequatur, vero facere!
+      <div class="main-info">
+        Эта страница поможет с расчетами платежей по ипотеке. Вы можете выбрать банк (или добавить
+        свой банк) и произвести расчеты платежей
       </div>
       <form action="" id="calculator-form">
         <input name="bank_name" placeholder="bank_name" type="text" required />
@@ -62,18 +59,17 @@
       </table>
     </section>
 
+    <div style="display: flex">
+      <input type="text" />
+      <input type="text" />
+    </div>
+
     <!-- modal calculator -->
 
     <div id="id02" class="modal">
       <div class="modal-content animate">
         <div class="imgcontainer">
-          <span
-            id="close-modal"
-            onclick="document.getElementById('id02').style.display='none'"
-            class="close"
-            title="Close Modal"
-            >×</span
-          >
+          <span id="close-modal" class="close" title="Close Modal">×</span>
         </div>
         <div class="container">
           <div>
@@ -101,10 +97,12 @@
                 <tr>
                   <th id="name-bank-modal"></th>
                   <th id="interest-rate-modal"></th>
-                  <th><input id="amount-borrowed-modal" type="text" /></th>
+                  <th>
+                    <input id="amount-borrowed-modal" type="number" />
+                  </th>
                   <!-- сумма займа - показывает макс но можно изменить -->
                   <th>
-                    <input id="minimum-down-payment-modal" type="text" />
+                    <input id="minimum-down-payment-modal" type="number" />
                     <!--расчет автоматически но можно изменить в больш сторону-->
                   </th>
                   <th>
