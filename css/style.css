@@ -1,5 +1,9 @@
 html {
   height: 100%;
+  overflow-x: hidden;
+  margin-right: calc(-1 * (100vw - 100%));
+  background-color: rgb(201, 253, 159);
+  background: linear-gradient(to top, rgb(201, 253, 159), rgb(171, 231, 121));
 }
 
 body {
@@ -7,6 +11,7 @@ body {
   margin: 0;
   box-sizing: border-box;
   height: 100%;
+  /* margin-right: calc(100vw - 100%); */
 }
 
 h1 {
@@ -19,10 +24,8 @@ h1 {
   align-items: center;
 
   margin: auto;
-  min-height: 100%;
+  /* min-height: 100%; */
   padding: 10px;
-  background-color: rgb(201, 253, 159);
-  background: linear-gradient(to top, rgb(201, 253, 159), rgb(171, 231, 121));
 }
 
 .main-info {
@@ -48,12 +51,14 @@ input {
   margin: 8px 0;
   display: inline-block;
   border: 1px solid #ccc;
+  border-radius: 4px;
   box-sizing: border-box;
 }
 
 /* Set a style for all buttons */
 button {
   background-color: #4caf50;
+  border-radius: 4px;
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
@@ -221,4 +226,8 @@ tr:hover {
 .table-edit-input {
   padding: 1px;
   margin: 0;
+}
+
+.error {
+  background-color: red;
 }

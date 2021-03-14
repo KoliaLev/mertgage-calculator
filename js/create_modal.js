@@ -42,7 +42,10 @@ function createModalBank(bank) {
     if (minPayment.value < (ammountBorrowed.value * bank.minDownPayment) / 100) {
       console.log("there");
       showNote(minPayment, "min платеж не может юыть меньше чем предусмотрено банком");
+      minPayment.className = "error";
       // minPayment.value = `${(ammountBorrowed.value * calcBank.minDownPayment) / 100}`;
+    } else {
+      minPayment.className = "";
     }
   }
 
@@ -50,7 +53,9 @@ function createModalBank(bank) {
   document.getElementById("close-modal").addEventListener("click", () => {
     ammountBorrowed.removeEventListener("keyup", handlerForAmmountBoroved);
     minPayment.removeEventListener("keyup", handlerForMinPayment);
+    // document.body.style.marginRight = "0px";
     modalCalculator.style.display = "none";
+    document.body.style.overflowY = "";
   });
 
   window.onclick = function (event) {

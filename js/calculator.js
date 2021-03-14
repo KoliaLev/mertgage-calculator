@@ -149,6 +149,8 @@ function addButton(elem, action) {
       let bankForModal = getBankByName(nameBank);
 
       document.getElementById("id02").style.display = "block";
+      document.body.style.overflowY = "hidden";
+      // document.body.style.marginRight = "calc(100vw - 100%)";
       createModalBank(bankForModal);
     };
   }
